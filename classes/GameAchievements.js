@@ -11,5 +11,4 @@ class GameAchievements{
     getPoints(){
         return this.points;
     }
-    
 }
