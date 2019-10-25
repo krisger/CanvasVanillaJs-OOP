@@ -5,9 +5,5 @@ class GameMenus{
         this.posY = posY;
         this.width = width;
         this.height = height
-    }
-    
-
-
-    
+    }   
 }
