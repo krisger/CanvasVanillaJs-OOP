@@ -6,6 +6,5 @@ class GameScreen{
     }
     
     setHeight(height){this.height = height;} 
-    setWidth(width){this.width = width; }
-    
+    setWidth(width){this.width = width; }  
 }
