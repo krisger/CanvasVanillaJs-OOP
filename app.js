@@ -1,72 +1,53 @@
 window.onload = function(e){ 
-    var isCollide = false;
-    var screen = new GameScreen(500, 500, "canvas");
-    var canvas = document.getElementsByTagName(screen.tag)[0];
+    
+    var game = new Game();
+    game.init();
+    game.start();
 
-    canvas.height = screen.height;
-    canvas.width = screen.width;   
-    var render = canvas.getContext("2d");
-
-    var Achievements = new GameAchievements("Points");
-    var Physics = new GamePhysics(render);
-    var Player = new GameObject(20, 20, 10, 10, 10, "player");
-    var ResultBoard = new GameObject(30, 30, 450, 20, 0, "score");
-
-
-    ResultBoard.draw(render, screen.width, screen.height, "#fff")
-    ResultBoard.setData(
-        render, 
-        Achievements.getPoints(), 
-        "#000"
-    );
-
-    Player.draw(render, screen.width, screen.height, "#000")
-    var Enemies = new Array;
-
-
-    for(var i = 0; i<= 5; i++){
-        Enemies.push(
-            new GameObject(
-                10,
-                10,
-                (Math.floor((Math.random() * screen.width) + 1)),
-                (Math.floor((Math.random() * screen.height) + 1)),
-                "enemy"
-            )
-        );
+    var player;
+    var enemies = [];
+    var resultBoard;
+    for(var i = 0; i < game.gameObjects.length; i++) {
+        if(game.gameObjects[i].type == gameObjectTypes.Player){
+            player = game.gameObjects[i];
+        } else if(game.gameObjects[i].type == gameObjectTypes.Enemy) {
+            enemies.push(game.gameObjects[i]);
+        } else if(game.gameObjects[i].type == gameObjectTypes.Score){
+            resultBoard = game.gameObjects[i];
+        }
     }
-
-    for(var i = 0; i <Enemies.length; i++){
-        Enemies[i].draw(render, screen.width, screen.height, "red")
-    }
-
 
     document.onkeypress = function(evt) {
+        
         var charCode = evt.keyCode || evt.which;
         var charStr = String.fromCharCode(charCode);
+        var isCollide = false;
+        
+        player.move(charStr, game.render, game.canvas.width, game.canvas.height, "#000");
+        for(var i = 0; i < enemies.length; i++){
+            if(enemies[i].status == "alive") {
+             
+                isCollide = game.physics.collision(player, enemies[i]);
+                if(isCollide) {
 
-        Player.move(charStr, render, screen.width, screen.height, "#000");
-        for(var i = 0; i <Enemies.length; i++){
-            if(Enemies[i].status == "alive"){
-                isCollide = Physics.collision(Player, Enemies[i]);
-                if(isCollide){
-                    Enemies[i].destroy(render);
-                    Enemies[i].setDied();
+                    game.achievements.addPoints(10);
+                    game.achievements.enemiesLeft -= 1;
 
-
-                    Achievements.addPoints(10);
-
-
-                    ResultBoard.destroy(render);
-
-                    ResultBoard.setData(
-                        render, 
-                        Achievements.getPoints(), 
-                        ResultBoard.posX, 
-                        ResultBoard.posY
-                    );
+                    enemies[i].destroy(game.render);
+                    enemies[i].setDied();                   
                 }
             }   
+        }
+
+        player.update(game.render, game.canvas.width, game.canvas.height, "#000");
+        resultBoard.destroy(game.render);
+        resultBoard.setData(
+            game.render, 
+            game.achievements.getPoints()
+        );
+
+        if(game.achievements.enemiesLeft == 0){
+           
         }
     };
 	

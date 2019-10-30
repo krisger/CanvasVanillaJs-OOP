@@ -1,16 +1,17 @@
 class GameObject{
-	constructor(width, height, posX, posY, stepSize, type){
+	constructor(width, height, posX, posY, stepSize, type, color){
 		this.width = width;
 		this.height = height;
 		this.posX = posX;
 		this.posY = posY;
 		this.stepSize = stepSize;
+		this.color = color;
 		this.type = type;
 		this.moveBy = 10; 
 		this.status = "alive";
 	}
     
-    draw(render, scrennWidth, screenHeight, color){
+    draw(render, scrennWidth, screenHeight){
 		
 		if(this.posX == 490) {
 			this.posX = -10;
@@ -26,23 +27,25 @@ class GameObject{
 			this.posY = 490;
 		}
 
-		render.fillStyle = color;
-		render.fillRect(
-			this.posX, 
-			this.posY,
-			this.width, 
-			this.height
-		);
+		if(this.color){
+			render.fillStyle = this.color;
+			render.fillRect(
+				this.posX, 
+				this.posY,
+				this.width, 
+				this.height
+			);
+		}
     }
 	
     setDied() {
         this.status = "die"; 
     }
     
-    setData(render, data, color) {
+    setData(render, data) {
         render.font = "16px Arial";
-        render.fillStyle = color;
-        render.fillText(data, this.posX + 15, this.posY + 15);
+        render.fillStyle = this.color;
+		render.fillText(data, this.posX + 15, this.posY + 15);
     }
     
     destroy(render){
@@ -72,5 +75,11 @@ class GameObject{
 		}
 
 		this.draw(render, scrennWidth, screenHeight, color)
-    } 
+	} 
+
+	update(render, scrennWidth, screenHeight, color){
+		this.destroy(render);
+		this.draw(render, scrennWidth, screenHeight, color)
+	}
+
 }
