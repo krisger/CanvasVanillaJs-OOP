@@ -12,6 +12,7 @@ class GameObjectCollisions{
 
     static enemy(game, gameObject) {
         if(gameObject.status == GameObjectStatus.alive) {
+            
             game.achievements.addPoints(10);
             game.achievements.enemiesLeft -= 1;
 
