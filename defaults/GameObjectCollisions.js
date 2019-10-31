@@ -22,11 +22,8 @@ class GameObjectCollisions{
     }
 
     static wall(game, player, playerCopy, gameObject) {
-
         player.destroy(game.render);
         player.posX = playerCopy.posX;
         player.posY = playerCopy.posY;
-
-        gameObject.update(game.render, game.canvas.width, game.canvas.height, gameObject.color);
     }
 }
