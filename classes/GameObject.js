@@ -7,24 +7,23 @@ class GameObject{
 		this.stepSize = stepSize;
 		this.color = color;
 		this.type = type;
-		this.moveBy = 10; 
-		this.status = "alive";
+		this.status = GameObjectStatus.alive;
 	}
     
-    draw(render, scrennWidth, screenHeight){
+    draw(render, screenWidth, screenHeight){
 		
-		if(this.posX == 490) {
+		if(this.posX > screenWidth + this.stepSize) {
 			this.posX = -10;
 		}
-		else if(this.posX == -10) {
+		else if(this.posX < -this.stepSize) {
 			this.posX = 490;
 		}
 
-		if(this.posY == 490) {
+		if(this.posY > screenHeight + this.stepSize) {
 			this.posY = -10;
 		}
-		else if(this.posY == -10){
-			this.posY = 490;
+		else if(this.posY <  -this.stepSize){
+			this.posY = screenHeight -10;
 		}
 
 		if(this.color){
@@ -39,7 +38,7 @@ class GameObject{
     }
 	
     setDied() {
-        this.status = "die"; 
+        this.status = GameObjectStatus.dead; 
     }
     
     setData(render, data) {
@@ -57,29 +56,27 @@ class GameObject{
 		);  
     }
     
-    move(key, render, scrennWidth, screenHeight, color){       
-     
+    move(key, render, scrennWidth, screenHeight, color) {       
+		
 		this.destroy(render);
-
+	
 		if(key == 'w') {
-		   this.posY -= this.moveBy
+		   this.posY -= this.stepSize
 		}
-		if(key == 's') { 
-		   this.posY += this.moveBy
+		else if(key == 's') { 
+		   this.posY += this.stepSize
 		}
-		if(key == 'a') {
-		   this.posX -= this.moveBy
+		else if(key == 'a') {
+		   this.posX -= this.stepSize
 		}
-		if(key == "d") { 
-		   this.posX += this.moveBy
+		else if(key == "d") { 
+		   this.posX += this.stepSize
 		}
 
 		this.draw(render, scrennWidth, screenHeight, color)
 	} 
 
-	update(render, scrennWidth, screenHeight, color){
-		this.destroy(render);
+	update(render, scrennWidth, screenHeight, color) {
 		this.draw(render, scrennWidth, screenHeight, color)
 	}
-
 }

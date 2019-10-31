@@ -1,19 +1,20 @@
 window.onload = function(e){ 
     
     var game = new Game();
-    game.init();
+
+    game.init(properties);
     game.start();
 
     var player;
-    var enemies = [];
     var resultBoard;
+
     for(var i = 0; i < game.gameObjects.length; i++) {
-        if(game.gameObjects[i].type == gameObjectTypes.Player){
+        if(game.gameObjects[i].type == GameObjectTypes.player){
             player = game.gameObjects[i];
-        } else if(game.gameObjects[i].type == gameObjectTypes.Enemy) {
-            enemies.push(game.gameObjects[i]);
-        } else if(game.gameObjects[i].type == gameObjectTypes.Score){
+        } else if(game.gameObjects[i].type == GameObjectTypes.score){
             resultBoard = game.gameObjects[i];
+        } else if(game.gameObjects[i].type == GameObjectTypes.enemy){
+            game.achievements.enemiesLeft += 1;
         }
     }
 
@@ -21,25 +22,23 @@ window.onload = function(e){
         
         var charCode = evt.keyCode || evt.which;
         var charStr = String.fromCharCode(charCode);
-        var isCollide = false;
+
+        var playerCopy = new GameObject(player.width, player.height, player.posX, player.posY);
+        player.move(charStr, game.render, game.canvas.width, game.canvas.height);
         
-        player.move(charStr, game.render, game.canvas.width, game.canvas.height, "#000");
-        for(var i = 0; i < enemies.length; i++){
-            if(enemies[i].status == "alive") {
-             
-                isCollide = game.physics.collision(player, enemies[i]);
-                if(isCollide) {
+        game.gameObjects.forEach(gameObject => {
+            
+            if(GamePhysics.collision(player, gameObject)) {
+                GameObjectCollisions.collide(game, player, playerCopy, gameObject);
+            }
 
-                    game.achievements.addPoints(10);
-                    game.achievements.enemiesLeft -= 1;
+            if(gameObject.status == GameObjectStatus.alive){
+                gameObject.update(game.render, game.canvas.width, game.canvas.height);
+            }
+        });
 
-                    enemies[i].destroy(game.render);
-                    enemies[i].setDied();                   
-                }
-            }   
-        }
+        player.update(game.render, game.canvas.width, game.canvas.height);
 
-        player.update(game.render, game.canvas.width, game.canvas.height, "#000");
         resultBoard.destroy(game.render);
         resultBoard.setData(
             game.render, 
@@ -47,7 +46,7 @@ window.onload = function(e){
         );
 
         if(game.achievements.enemiesLeft == 0){
-           
+            alert("success");
         }
     };
 	
