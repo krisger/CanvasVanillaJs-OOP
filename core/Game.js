@@ -38,11 +38,11 @@ class Game {
             this.start(properties.levels[this.level].gameObjects);
     
             for(var i = 0; i < this.gameObjects.length; i++) {
-                if(this.gameObjects[i].type == GameObjectTypes.player){
+                if(this.gameObjects[i].type == "Player"){
                     this.player = this.gameObjects[i];
-                } else if(this.gameObjects[i].type == GameObjectTypes.score){
+                } else if(this.gameObjects[i].type == "ScoreBoard"){
                     this.resultBoard = this.gameObjects[i];
-                } else if(this.gameObjects[i].type == GameObjectTypes.enemy){
+                } else if(this.gameObjects[i].type == "Enemy"){
                     this.achievements.enemiesLeft += 1;
                 }
             }

@@ -9,6 +9,5 @@ class GamePhysics{
             firstObject.posX + firstObject.width > secondObject.posX &&
             firstObject.posY < secondObject.posY + secondObject.height &&
             firstObject.posY + firstObject.height > secondObject.posY);
-    }
-    
+    } 
 }

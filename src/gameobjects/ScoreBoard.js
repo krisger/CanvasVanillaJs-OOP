@@ -1,0 +1,3 @@
+class ScoreBoard extends GameObject {
+
+}

@@ -2,7 +2,7 @@ window.onload = function(e){
     var game = new Game();
     game.init(properties);
     game.load(properties);
-
+    
     var resultBoard = game.resultBoard;
 
     document.onkeypress = function(evt) {
@@ -17,7 +17,7 @@ window.onload = function(e){
         game.gameObjects.forEach(gameObject => {
             
             if(GamePhysics.collision(player, gameObject)) {
-                GameObjectCollisions.collide(game, player, playerCopy, gameObject);
+                gameObject.collide(game, player, playerCopy, gameObject);
             }
     
             if(gameObject.status == GameObjectStatus.alive){
@@ -38,11 +38,26 @@ window.onload = function(e){
             if(properties.levels[game.level]){
                 game.destroy();
                 game.load(properties);
+
+                resultBoard.destroy(game.render);
+                resultBoard.setData(
+                    game.render, 
+                    game.achievements.getPoints()
+                );
+
             }else{
-                alert("Game over");
+                game.destroy();
+                 resultBoard.setData(
+                    game.render, 
+                    game.achievements.getPoints()
+                );
             }
         }
     };
+
+    function action(){
+        
+    }
 }
 	
 
